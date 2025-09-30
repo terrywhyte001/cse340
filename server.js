@@ -3,15 +3,13 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
-const morgan = require("morgan"); // optional logger
 
-const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct filename
+const inventoryRoutes = require("./routes/inventoryRoutes.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ---------- Middleware ----------
-app.use(morgan("dev")); // logs requests (optional)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -29,8 +27,8 @@ app.get("/trigger-error", (req, res, next) => {
 });
 
 // ---------- 404 Handler ----------
-app.use((req, res, next) => {
-  // Render 404 error page if available
+app.use((req, res) => {
+  // Safe fallback in case EJS is missing
   try {
     res.status(404).render("error/error", { message: "404 Not Found" });
   } catch {
@@ -56,11 +54,9 @@ mongoose
   })
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
+    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1); // Stop app if DB fails
+    process.exit(1);
   });
