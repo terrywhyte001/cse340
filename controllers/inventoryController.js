@@ -1,43 +1,61 @@
-const inventoryModel = require("../models/inventoryModel");
-const utilities = require("../utilities");
+const Inventory = require("../models/Inventory");
 
-async function buildClassificationView(req, res, next) {
+// Get all vehicles
+exports.getAllVehicles = async (req, res, next) => {
   try {
-    const classification = req.params.classification;
-    const vehicles = await inventoryModel.getByClassification(classification);
-
-    const grid = utilities.buildClassificationGrid(vehicles);
-    res.render("inventory/classification", {
-      title: `${classification} Vehicles`,
-      nav: utilities.getNav(),
-      grid
-    });
+    const vehicles = await Inventory.find();
+    res.render("inventory/index", { vehicles });
   } catch (err) {
     next(err);
   }
-}
+};
 
-async function buildDetailView(req, res, next) {
+// Get vehicle by ID
+exports.getVehicleById = async (req, res, next) => {
   try {
-    const vehicleId = req.params.id;
-    const vehicle = await inventoryModel.getById(vehicleId);
-
+    const vehicle = await Inventory.findById(req.params.id);
     if (!vehicle) {
       return res.status(404).render("error/error", { message: "Vehicle not found" });
     }
-
-    const detail = utilities.buildDetailView(vehicle);
-    res.render("inventory/detail", {
-      title: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
-      nav: utilities.getNav(),
-      detail
-    });
+    res.render("inventory/detail", { vehicle });
   } catch (err) {
     next(err);
   }
-}
+};
 
-module.exports = {
-  buildClassificationView,
-  buildDetailView
+// Create new vehicle
+exports.createVehicle = async (req, res, next) => {
+  try {
+    const vehicle = new Inventory(req.body);
+    await vehicle.save();
+    res.redirect("/inventory");
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Update vehicle
+exports.updateVehicle = async (req, res, next) => {
+  try {
+    const vehicle = await Inventory.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!vehicle) {
+      return res.status(404).render("error/error", { message: "Vehicle not found" });
+    }
+    res.redirect(`/inventory/${vehicle._id}`);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Delete vehicle
+exports.deleteVehicle = async (req, res, next) => {
+  try {
+    const vehicle = await Inventory.findByIdAndDelete(req.params.id);
+    if (!vehicle) {
+      return res.status(404).render("error/error", { message: "Vehicle not found" });
+    }
+    res.redirect("/inventory");
+  } catch (err) {
+    next(err);
+  }
 };
