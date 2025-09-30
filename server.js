@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const morgan = require("morgan");
 
-const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct path
+const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct file name
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,21 +42,25 @@ app.use((req, res) => {
   res.renderSafe("error/error", { message: "404 Not Found" }, 404);
 });
 
-// ---------- Error Handler ----------
+// ---------- Global Error Handler ----------
 app.use((err, req, res, next) => {
   console.error("💥 ERROR:", err.stack);
   res.renderSafe("error/error", { message: err.message || "Something went wrong!" }, 500);
 });
 
 // ---------- MongoDB Connection ----------
-mongoose
-  .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("✅ Connected to MongoDB");
     app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
-  })
-  .catch((err) => {
+  } catch (err) {
     console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
-  });
+  }
+};
 
+connectDB();
