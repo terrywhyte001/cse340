@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const morgan = require("morgan");
 
-const inventoryRoutes = require("./routes/inventoryRoutes.js"); // Ensure correct path
+const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct path
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,9 +29,9 @@ app.get("/trigger-error", (req, res, next) => {
 
 // ---------- 404 Handler ----------
 app.use((req, res) => {
-  try {
-    res.status(404).render("error/error", { message: "404 Not Found" });
-  } catch {
+  if (app.get("view engine")) {
+    res.status(404).renderSafe("error/error", { message: "404 Not Found" });
+  } else {
     res.status(404).send("404 Not Found");
   }
 });
@@ -39,12 +39,21 @@ app.use((req, res) => {
 // ---------- Error Handler ----------
 app.use((err, req, res, next) => {
   console.error("💥 ERROR:", err.stack);
-  try {
-    res.status(500).render("error/error", { message: err.message || "Something went wrong!" });
-  } catch {
+  if (app.get("view engine")) {
+    res.renderSafe("error/error", { message: err.message || "Something went wrong!" }, 500);
+  } else {
     res.status(500).send(err.message || "Something went wrong!");
   }
 });
+
+// ---------- Helper for safe rendering ----------
+app.response.renderSafe = function(view, options = {}, status = 200) {
+  try {
+    this.status(status).render(view, options);
+  } catch {
+    this.status(status).send(options.message || "Error rendering view");
+  }
+};
 
 // ---------- MongoDB Connection ----------
 mongoose
