@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const morgan = require("morgan");
 
-const inventoryRoutes = require("./routes/inventoryRoutes.js");
+const inventoryRoutes = require("./routes/inventoryRoutes.js"); // Ensure correct path
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,7 +22,7 @@ app.set("views", path.join(__dirname, "views"));
 // ---------- Routes ----------
 app.use("/inventory", inventoryRoutes);
 
-// ---------- Intentional error route ----------
+// ---------- Intentional Error Route ----------
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional server error!"));
 });
@@ -36,9 +36,9 @@ app.use((req, res) => {
   }
 });
 
-// ---------- Error Handling ----------
+// ---------- Error Handler ----------
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error("💥 ERROR:", err.stack);
   try {
     res.status(500).render("error/error", { message: err.message || "Something went wrong!" });
   } catch {
@@ -48,15 +48,10 @@ app.use((err, req, res, next) => {
 
 // ---------- MongoDB Connection ----------
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
