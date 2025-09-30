@@ -1,7 +1,7 @@
 // seed.js
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Inventory = require("./models/inventoryModel");
+const Inventory = require("./models/inventoryModel.js"); // 👈 added .js extension
 
 const vehicles = [
   {
@@ -38,13 +38,13 @@ const vehicles = [
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
-    console.log("Connected to MongoDB for seeding...");
+    console.log("✅ Connected to MongoDB for seeding...");
     await Inventory.deleteMany({});
     await Inventory.insertMany(vehicles);
     console.log("✅ Vehicles seeded successfully!");
     process.exit();
   })
   .catch(err => {
-    console.error("Seeding error:", err);
+    console.error("❌ Seeding error:", err);
     process.exit(1);
   });
