@@ -1,14 +1,17 @@
+// server.js
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const morgan = require("morgan"); // optional logger
 
-const inventoryRoutes = require("./routes/inventoryRoutes"); // ✅ corrected filename
+const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct filename
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ---------- Middleware ----------
+app.use(morgan("dev")); // logs requests (optional)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -20,20 +23,29 @@ app.set("views", path.join(__dirname, "views"));
 // ---------- Routes ----------
 app.use("/inventory", inventoryRoutes);
 
-// Intentional error route for Task 3
+// Intentional error route for testing
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional server error!"));
+});
+
+// ---------- 404 Handler ----------
+app.use((req, res, next) => {
+  // Render 404 error page if available
+  try {
+    res.status(404).render("error/error", { message: "404 Not Found" });
+  } catch {
+    res.status(404).send("404 Not Found");
+  }
 });
 
 // ---------- Error Handling ----------
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).render("error/error", { message: err.message });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render("error/error", { message: "404 Not Found" });
+  try {
+    res.status(500).render("error/error", { message: err.message || "Something went wrong!" });
+  } catch {
+    res.status(500).send(err.message || "Something went wrong!");
+  }
 });
 
 // ---------- MongoDB Connection ----------
@@ -44,12 +56,11 @@ mongoose
   })
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1); // stop app if DB fails
+    process.exit(1); // Stop app if DB fails
   });
-
