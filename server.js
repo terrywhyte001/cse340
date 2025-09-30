@@ -22,7 +22,7 @@ app.set("views", path.join(__dirname, "views"));
 // ---------- Routes ----------
 app.use("/inventory", inventoryRoutes);
 
-// ---------- Intentional error route for testing ----------
+// ---------- Intentional error route ----------
 app.get("/trigger-error", (req, res, next) => {
   next(new Error("Intentional server error!"));
 });

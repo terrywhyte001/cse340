@@ -1,49 +1,42 @@
-// seed.js
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Inventory = require("./models/inventoryModel.js");
+const Inventory = require("./models/inventoryModel.js"); // make sure the path is correct
 
-// Arrays of sample data to randomize vehicles
-const makes = ["Toyota", "Ford", "Honda", "Chevrolet", "Nissan", "BMW", "Kia"];
-const models = ["Camry", "F-150", "CR-V", "Altima", "X5", "Sorento", "Silverado"];
-const classifications = ["Sedan", "Truck", "SUV", "Coupe", "Van", "Hatchback"];
-const descriptions = [
-  "Reliable and efficient vehicle.",
-  "Spacious interior with modern tech.",
-  "Best-selling model with great reviews.",
-  "Fuel-efficient and comfortable ride.",
-  "Powerful engine with excellent towing capacity.",
+// Vehicles to seed
+const vehicles = [
+  {
+    make: "Toyota",
+    model: "Camry",
+    year: 2022,
+    price: 25000,
+    mileage: 15000,
+    description: "Reliable mid-size sedan with advanced safety features.",
+    image: "/images/camry.jpg",
+    classification: "Sedan",
+  },
+  {
+    make: "Ford",
+    model: "F-150",
+    year: 2021,
+    price: 35000,
+    mileage: 20000,
+    description: "Best-selling pickup truck with powerful towing capacity.",
+    image: "/images/f150.jpg",
+    classification: "Truck",
+  },
+  {
+    make: "Honda",
+    model: "CR-V",
+    year: 2023,
+    price: 32000,
+    mileage: 5000,
+    description: "Compact SUV with spacious interior and modern tech.",
+    image: "/images/crv.jpg",
+    classification: "SUV",
+  },
 ];
 
-// Function to generate a random integer between min and max
-const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-// Function to generate random vehicle objects
-const generateVehicles = (num) => {
-  const vehicles = [];
-  for (let i = 0; i < num; i++) {
-    const makeIndex = randomInt(0, makes.length - 1);
-    const modelIndex = randomInt(0, models.length - 1);
-    const classificationIndex = randomInt(0, classifications.length - 1);
-    const descriptionIndex = randomInt(0, descriptions.length - 1);
-
-    vehicles.push({
-      make: makes[makeIndex],
-      model: models[modelIndex],
-      year: randomInt(2015, 2025),
-      price: randomInt(15000, 50000),
-      mileage: randomInt(0, 100000),
-      description: descriptions[descriptionIndex],
-      image: `/images/${models[modelIndex].toLowerCase()}.jpg`,
-      classification: classifications[classificationIndex],
-    });
-  }
-  return vehicles;
-};
-
-// Number of vehicles to seed
-const NUM_VEHICLES = 20;
-
+// Connect to MongoDB and seed
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -51,16 +44,16 @@ mongoose
   })
   .then(async () => {
     console.log("✅ Connected to MongoDB for seeding...");
-
-    // Clear existing data
+    
+    // Clear existing vehicles
     await Inventory.deleteMany({});
+    console.log("🗑️  Cleared existing vehicles");
 
-    // Insert random vehicles
-    const vehicles = generateVehicles(NUM_VEHICLES);
-    const inserted = await Inventory.insertMany(vehicles);
-    console.log(`✅ ${inserted.length} vehicles seeded successfully!`);
+    // Insert new vehicles
+    await Inventory.insertMany(vehicles);
+    console.log("✅ Vehicles seeded successfully!");
 
-    process.exit();
+    process.exit(0);
   })
   .catch((err) => {
     console.error("❌ Seeding error:", err);
