@@ -19,6 +19,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// ---------- Helper for safe rendering ----------
+app.response.renderSafe = function(view, options = {}, status = 200) {
+  try {
+    this.status(status).render(view, options);
+  } catch (err) {
+    console.error("Render error:", err.message);
+    this.status(status).send(options.message || "Error rendering view");
+  }
+};
+
 // ---------- Routes ----------
 app.use("/inventory", inventoryRoutes);
 
@@ -29,31 +39,14 @@ app.get("/trigger-error", (req, res, next) => {
 
 // ---------- 404 Handler ----------
 app.use((req, res) => {
-  if (app.get("view engine")) {
-    res.status(404).renderSafe("error/error", { message: "404 Not Found" });
-  } else {
-    res.status(404).send("404 Not Found");
-  }
+  res.renderSafe("error/error", { message: "404 Not Found" }, 404);
 });
 
 // ---------- Error Handler ----------
 app.use((err, req, res, next) => {
   console.error("💥 ERROR:", err.stack);
-  if (app.get("view engine")) {
-    res.renderSafe("error/error", { message: err.message || "Something went wrong!" }, 500);
-  } else {
-    res.status(500).send(err.message || "Something went wrong!");
-  }
+  res.renderSafe("error/error", { message: err.message || "Something went wrong!" }, 500);
 });
-
-// ---------- Helper for safe rendering ----------
-app.response.renderSafe = function(view, options = {}, status = 200) {
-  try {
-    this.status(status).render(view, options);
-  } catch {
-    this.status(status).send(options.message || "Error rendering view");
-  }
-};
 
 // ---------- MongoDB Connection ----------
 mongoose
