@@ -1,1 +1,15 @@
-<%- include("../layout", { body: detail }) %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= vehicle.make %> <%= vehicle.model %></title>
+</head>
+<body>
+  <h1><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h1>
+  <p><strong>Price:</strong> $<%= vehicle.price %></p>
+  <p><strong>Mileage:</strong> <%= vehicle.mileage %> miles</p>
+  <p><strong>Description:</strong> <%= vehicle.description %></p>
+  <img src="<%= vehicle.image %>" alt="<%= vehicle.make %> <%= vehicle.model %>" style="max-width:300px;">
+  <br><br>
+  <a href="/inventory">Back to Inventory</a>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory</title>
+</head>
+<body>
+  <h1>Vehicle Inventory</h1>
+  <ul>
+    <% vehicles.forEach(vehicle => { %>
+      <li>
+        <a href="/inventory/<%= vehicle._id %>">
+          <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %> - $<%= vehicle.price %>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>

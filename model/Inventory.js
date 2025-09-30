@@ -5,8 +5,10 @@ const inventorySchema = new mongoose.Schema({
   model: { type: String, required: true },
   year: { type: Number, required: true },
   price: { type: Number, required: true },
-  color: { type: String },
-  mileage: { type: Number },
-}, { timestamps: true });
+  mileage: { type: Number, required: true },
+  description: { type: String },
+  image: { type: String },
+  classification: { type: String, required: true }
+});
 
 module.exports = mongoose.model("Inventory", inventorySchema);
