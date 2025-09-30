@@ -1,3 +1,4 @@
+// models/inventoryModel.js
 const mongoose = require("mongoose");
 
 const inventorySchema = new mongoose.Schema({
@@ -6,9 +7,9 @@ const inventorySchema = new mongoose.Schema({
   year: { type: Number, required: true },
   price: { type: Number, required: true },
   mileage: { type: Number, required: true },
-  description: { type: String },
-  image: { type: String },
-  classification: { type: String, required: true }
+  description: { type: String, required: true },
+  image: { type: String, required: true },
+  classification: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Inventory", inventorySchema);

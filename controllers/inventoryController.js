@@ -1,4 +1,4 @@
-const Inventory = require("../models/inventoryModel");
+const Inventory = require("../models/Inventory");
 
 
 // Get all vehicles
