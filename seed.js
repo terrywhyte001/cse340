@@ -1,7 +1,7 @@
 // seed.js
-require("dotenv").config();
+require("dotenv").config(); // Load .env variables
 const mongoose = require("mongoose");
-const Inventory = require("./models/inventoryModel.js"); // 👈 added .js extension
+const Inventory = require("./models/inventoryModel.js"); // Ensure .js extension
 
 const vehicles = [
   {
@@ -36,15 +36,25 @@ const vehicles = [
   },
 ];
 
-mongoose.connect(process.env.MONGODB_URI)
+// Connect to MongoDB using environment variable
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(async () => {
     console.log("✅ Connected to MongoDB for seeding...");
+
+    // Clear existing data
     await Inventory.deleteMany({});
-    await Inventory.insertMany(vehicles);
-    console.log("✅ Vehicles seeded successfully!");
-    process.exit();
+    
+    // Insert new vehicles
+    const inserted = await Inventory.insertMany(vehicles);
+    console.log(`✅ ${inserted.length} vehicles seeded successfully!`);
+    
+    process.exit(); // Exit after seeding
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("❌ Seeding error:", err);
     process.exit(1);
   });
