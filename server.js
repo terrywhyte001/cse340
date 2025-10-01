@@ -3,8 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const morgan = require("morgan");
+const session = require("express-session");
+const flash = require("connect-flash");
 
-const inventoryRoutes = require("./routes/inventoryRoutes.js"); // ensure correct file name
+const inventoryRoutes = require("./routes/inventoryRoutes.js"); // Week 4 routes
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,12 +17,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// ---------- Session & Flash ----------
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret_key",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(flash());
+
 // ---------- View Engine ----------
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // ---------- Helper for safe rendering ----------
-app.response.renderSafe = function(view, options = {}, status = 200) {
+app.response.renderSafe = function (view, options = {}, status = 200) {
   try {
     this.status(status).render(view, options);
   } catch (err) {
@@ -30,7 +42,12 @@ app.response.renderSafe = function(view, options = {}, status = 200) {
 };
 
 // ---------- Routes ----------
-app.use("/inventory", inventoryRoutes);
+app.use("/inv", inventoryRoutes); // Week 4 route prefix
+
+// Optional: redirect root to inventory management
+app.get("/", (req, res) => {
+  res.redirect("/inv/manage");
+});
 
 // ---------- Intentional Error Route ----------
 app.get("/trigger-error", (req, res, next) => {
@@ -45,7 +62,11 @@ app.use((req, res) => {
 // ---------- Global Error Handler ----------
 app.use((err, req, res, next) => {
   console.error("💥 ERROR:", err.stack);
-  res.renderSafe("error/error", { message: err.message || "Something went wrong!" }, 500);
+  res.renderSafe(
+    "error/error",
+    { message: err.message || "Something went wrong!" },
+    500
+  );
 });
 
 // ---------- MongoDB Connection ----------
@@ -56,7 +77,9 @@ const connectDB = async () => {
       useUnifiedTopology: true,
     });
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on http://localhost:${PORT}`)
+    );
   } catch (err) {
     console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);

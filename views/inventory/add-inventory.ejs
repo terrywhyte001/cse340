@@ -1,0 +1,34 @@
+<h1>Add Vehicle</h1>
+
+<% if (message && message.length) { %>
+  <p class="notice"><%= message %></p>
+<% } %>
+
+<form action="/inv/add-inventory" method="POST">
+  <label for="invMake">Make:</label>
+  <input type="text" name="inv_make" id="invMake" value="<%= sticky.inv_make || '' %>" required>
+
+  <label for="invModel">Model:</label>
+  <input type="text" name="inv_model" id="invModel" value="<%= sticky.inv_model || '' %>" required>
+
+  <label for="invYear">Year:</label>
+  <input type="number" name="inv_year" id="invYear" value="<%= sticky.inv_year || '' %>" required>
+
+  <label for="invPrice">Price:</label>
+  <input type="number" step="0.01" name="inv_price" id="invPrice" value="<%= sticky.inv_price || '' %>" required>
+
+  <label for="invMileage">Mileage:</label>
+  <input type="number" name="inv_mileage" id="invMileage" value="<%= sticky.inv_mileage || '' %>" required>
+
+  <label for="invDescription">Description:</label>
+  <textarea name="inv_description" id="invDescription" required><%= sticky.inv_description || '' %></textarea>
+
+  <label for="invImage">Image Path:</label>
+  <input type="text" name="inv_image" id="invImage" value="<%= sticky.inv_image || '/images/no-image.png' %>">
+
+  <label for="classificationList">Classification:</label>
+  <%- classificationList %>
+
+  <button type="submit">Add Vehicle</button>
+</form>
+

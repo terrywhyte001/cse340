@@ -1,18 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Inventory</title>
-</head>
-<body>
-  <h1>Vehicle Inventory</h1>
-  <ul>
+<h1>Vehicle Inventory</h1>
+
+<% if (!vehicles.length) { %>
+  <p class="notice">Sorry, no vehicles found.</p>
+<% } else { %>
+  <ul class="vehicle-grid">
     <% vehicles.forEach(vehicle => { %>
       <li>
-        <a href="/inventory/<%= vehicle._id %>">
-          <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %> - $<%= vehicle.price %>
+        <a href="/inv/<%= vehicle._id %>">
+          <img src="<%= vehicle.image %>" alt="<%= vehicle.make %> <%= vehicle.model %>">
+          <h2><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h2>
+          <p><strong>Classification:</strong> <%= vehicle.classification_id ? vehicle.classification_id.classification_name : 'N/A' %></p>
+          <p><strong>Price:</strong> $<%= vehicle.price.toLocaleString() %></p>
         </a>
       </li>
     <% }) %>
   </ul>
-</body>
-</html>
+<% } %>
+

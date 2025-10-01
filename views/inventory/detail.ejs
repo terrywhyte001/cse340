@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title><%= vehicle.make %> <%= vehicle.model %></title>
-</head>
-<body>
-  <h1><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h1>
-  <p><strong>Price:</strong> $<%= vehicle.price %></p>
-  <p><strong>Mileage:</strong> <%= vehicle.mileage %> miles</p>
-  <p><strong>Description:</strong> <%= vehicle.description %></p>
-  <img src="<%= vehicle.image %>" alt="<%= vehicle.make %> <%= vehicle.model %>" style="max-width:300px;">
-  <br><br>
-  <a href="/inventory">Back to Inventory</a>
-</body>
-</html>
+<h1><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h1>
+
+<p><strong>Classification:</strong> <%= vehicle.classification_id ? vehicle.classification_id.classification_name : 'N/A' %></p>
+<p><strong>Price:</strong> $<%= vehicle.price.toLocaleString() %></p>
+<p><strong>Mileage:</strong> <%= vehicle.mileage.toLocaleString() %> miles</p>
+<p><strong>Description:</strong> <%= vehicle.description %></p>
+
+<img src="<%= vehicle.image %>" alt="<%= vehicle.make %> <%= vehicle.model %>" style="max-width:300px;">
+
+<br><br>
+<a href="/inv">Back to Inventory</a>
