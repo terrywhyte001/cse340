@@ -1,8 +1,13 @@
+-- Drop existing tables and types if they exist
+DROP TABLE IF EXISTS public.comments;
+DROP TABLE IF EXISTS public.inventory;
+DROP TABLE IF EXISTS public.classification;
+DROP TABLE IF EXISTS public.account;
+DROP TYPE IF EXISTS public.account_type;
+
+-- Create account type enum
 CREATE TYPE public.account_type AS ENUM
     ('Client', 'Employee', 'Admin');
-
-ALTER TYPE public.account_type
-    OWNER TO cse340user;
 
 -- Table structure for table `classification` --
 CREATE TABLE public.classification (
@@ -264,6 +269,5 @@ UPDATE public.inventory SET inv_description = REPLACE(inv_description, 'small in
 
 
 
--- Query to Add /vehicles to the File Paths in `inventory` table --
-UPDATE public.inventory SET inv_image = REPLACE(inv_image, '/images', '/images/vehicles'),
-	inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+-- Add /vehicles to the File Paths during insert instead of updating later
+-- The image paths in the INSERT statements above already include /vehicles/
