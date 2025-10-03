@@ -68,9 +68,80 @@ async function deleteComment(commentId) {
   }
 }
 
+/* *****************************
+ * Like a comment
+ * ***************************** */
+async function likeComment(comment_id, account_id) {
+  try {
+    await pool.query('BEGIN');
+    
+    await pool.query(
+      `INSERT INTO comment_likes (comment_id, account_id) VALUES ($1, $2)`,
+      [comment_id, account_id]
+    );
+    
+    const result = await pool.query(
+      `UPDATE comments SET comment_rating = comment_rating + 1 WHERE comment_id = $1 RETURNING *`,
+      [comment_id]
+    );
+    
+    await pool.query('COMMIT');
+    return result.rows[0];
+  } catch (error) {
+    await pool.query('ROLLBACK');
+    console.error("likeComment error:", error);
+    throw error;
+  }
+}
+
+/* *****************************
+ * Unlike a comment
+ * ***************************** */
+async function unlikeComment(comment_id, account_id) {
+  try {
+    await pool.query('BEGIN');
+    
+    await pool.query(
+      `DELETE FROM comment_likes WHERE comment_id = $1 AND account_id = $2`,
+      [comment_id, account_id]
+    );
+    
+    const result = await pool.query(
+      `UPDATE comments SET comment_rating = comment_rating - 1 WHERE comment_id = $1 RETURNING *`,
+      [comment_id]
+    );
+    
+    await pool.query('COMMIT');
+    return result.rows[0];
+  } catch (error) {
+    await pool.query('ROLLBACK');
+    console.error("unlikeComment error:", error);
+    throw error;
+  }
+}
+
+/* *****************************
+ * Check if user has liked a comment
+ * ***************************** */
+async function hasUserLikedComment(comment_id, account_id) {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM comment_likes WHERE comment_id = $1 AND account_id = $2`,
+      [comment_id, account_id]
+    );
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error("hasUserLikedComment error:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   addComment,
   getCommentsByVehicleId,
   getCommentById,
   deleteComment,
+  likeComment,
+  unlikeComment,
+  hasUserLikedComment,
 };

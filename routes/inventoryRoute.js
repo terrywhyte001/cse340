@@ -3,7 +3,76 @@ const express = require("express");
 const router = new express.Router();
 const invController = require("../controllers/invController");
 const utilities = require("../utilities/index");
-const managementValidate = require("../utilities/management-validation");
+const validate = require("../utilities/management-validation");
+
+// Route to build inventory by classification view
+router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
+
+// Route for vehicle detail view
+router.get("/detail/:invId", utilities.handleErrors(invController.buildVehicleById));
+
+// Management routes - protected by login and role
+router.get("/", 
+  utilities.checkLogin,
+  utilities.handleErrors(invController.showManagementView)
+);
+
+// Add classification routes
+router.get("/add-classification", 
+  utilities.checkLogin,
+  utilities.handleErrors(invController.showAddClassificationView)
+);
+
+router.post("/add-classification",
+  utilities.checkLogin,
+  validate.classificationRules(),
+  validate.checkClassificationData,
+  utilities.handleErrors(invController.addClassification)
+);
+
+// Add inventory routes
+router.get("/add-inventory", 
+  utilities.checkLogin,
+  utilities.handleErrors(invController.showAddInventoryView)
+);
+
+router.post("/add-inventory",
+  utilities.checkLogin,
+  validate.inventoryRules(),
+  validate.checkInvData,
+  utilities.handleErrors(invController.addInventory)
+);
+
+// Get inventory by classification for management view
+router.get("/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+// Edit inventory routes
+router.get("/edit/:invId", 
+  utilities.checkLogin,
+  utilities.handleErrors(invController.showEditView)
+);
+
+router.post("/update",
+  utilities.checkLogin,
+  validate.inventoryRules(),
+  validate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+);
+
+// Delete inventory routes
+router.get("/delete/:invId", 
+  utilities.checkLogin,
+  utilities.handleErrors(invController.showDeleteView)
+);
+
+router.post("/delete",
+  utilities.checkLogin,
+  utilities.handleErrors(invController.deleteInventory)
+);
+
+module.exports = router;
 
 // Task 1: Management View
 router.get(
@@ -26,8 +95,8 @@ router.post(
   "/add-classification",
   utilities.authMiddleware,
   utilities.authorizeAdminOrEmployee,
-  managementValidate.classificationRules(),
-  managementValidate.checkClassificationData,
+  validate.classificationRules(),
+  validate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
 );
 
@@ -44,8 +113,8 @@ router.post(
   "/add-inventory",
   utilities.authMiddleware,
   utilities.authorizeAdminOrEmployee,
-  managementValidate.inventoryRules(),
-  managementValidate.checkInvData,
+  validate.inventoryRules(),
+  validate.checkInvData,
   utilities.handleErrors(invController.addInventory)
 );
 
@@ -67,8 +136,8 @@ router.post(
   "/update",
   utilities.authMiddleware,
   utilities.authorizeAdminOrEmployee,
-  managementValidate.inventoryRules(),
-  managementValidate.checkUpdateData,
+  validate.inventoryRules(),
+  validate.checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
 );
 

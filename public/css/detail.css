@@ -1,0 +1,92 @@
+/* Vehicle Detail Styles */
+.vehicle-detail {
+  display: grid;
+  gap: 2rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.vehicle-info {
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.vehicle-info h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.price {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.description {
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.miles, .color {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+/* Comment Styles */
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.comment-list li {
+  background: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comment-body {
+  margin-top: 0.5rem;
+}
+
+/* Responsive Design */
+@media screen and (min-width: 768px) {
+  .vehicle-detail {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .vehicle-image {
+    grid-column: 1;
+  }
+  
+  .vehicle-info {
+    grid-column: 2;
+  }
+}
+
+/* Error Message Styles */
+.flash-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.flash-message-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  list-style: none;
+}

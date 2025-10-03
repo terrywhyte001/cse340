@@ -27,16 +27,67 @@
     ><br>
     <div class="comment-body">
     <p><%= comment.comment_text %></p>
+    <style>
+      .comment-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      
+      .like-form {
+        display: inline;
+      }
+      
+      .like-btn {
+        padding: 0.25rem 0.5rem;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .like-btn.liked {
+        background: #e0e0ff;
+        border-color: #9090ff;
+      }
+      
+      .like-count {
+        margin-right: 0.5rem;
+        font-weight: bold;
+      }
+      
+      .comment-delete-btn {
+        padding: 0.25rem 0.5rem;
+        background: #ffebeb;
+        border: 1px solid #ffbdbd;
+        border-radius: 4px;
+        color: #d00;
+        cursor: pointer;
+      }
+    </style>
 
-    <% if (user && user.account_id === comment.account_id) { %>
-        <form
-            action="/comment/delete/<%= comment.comment_id %>?invId=<%= vehicle.inv_id %>"
-            method="POST"
-            onsubmit="return confirm('Are you sure you want to delete this comment?');"
-        >
-            <button type="submit" class="comment-delete-btn">Delete</button>
+    <div class="comment-actions">
+      <% if (user) { %>
+        <form action="/comment/like/<%= comment.comment_id %>" method="POST" class="like-form">
+          <button type="submit" class="like-btn <%= comment.hasLiked ? 'liked' : '' %>">
+            <span class="like-count"><%= comment.comment_rating || 0 %></span>
+            <%= comment.hasLiked ? 'Unlike' : 'Like' %>
+          </button>
         </form>
-    <% } %>
+      <% } else { %>
+        <span class="like-count" title="Likes"><%= comment.comment_rating || 0 %> likes</span>
+      <% } %>
+
+      <% if (user && user.account_id === comment.account_id) { %>
+        <form
+          action="/comment/delete/<%= comment.comment_id %>?invId=<%= vehicle.inv_id %>"
+          method="POST"
+          onsubmit="return confirm('Are you sure you want to delete this comment?');"
+        >
+          <button type="submit" class="comment-delete-btn">Delete</button>
+        </form>
+      <% } %>
+    </div>
     </div>
   </li>
   <% }); %>

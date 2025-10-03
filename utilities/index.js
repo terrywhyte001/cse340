@@ -3,6 +3,47 @@ const Util = {};
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+/* **************************************
+ * Format number as currency
+ * ************************************ */
+Util.formatCurrency = (number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(number);
+};
+
+/* **************************************
+ * Format number with commas
+ * ************************************ */
+Util.formatNumber = (number) => {
+  return new Intl.NumberFormat('en-US').format(number);
+};
+
+/* **************************************
+ * Build the vehicle detail view HTML
+ * ************************************ */
+Util.buildVehicleHTML = async function (vehicle) {
+  let html = '<div class="vehicle-detail">';
+  
+  // Image section
+  html += '<div class="vehicle-image">';
+  html += `<img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">`;
+  html += '</div>';
+  
+  // Information section
+  html += '<div class="vehicle-info">';
+  html += `<h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>`;
+  html += `<p class="price">Price: ${Util.formatCurrency(vehicle.inv_price)}</p>`;
+  html += `<p class="description">${vehicle.inv_description}</p>`;
+  html += `<p class="miles">Miles: ${Util.formatNumber(vehicle.inv_miles)}</p>`;
+  html += `<p class="color">Color: ${vehicle.inv_color}</p>`;
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+};
+
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */

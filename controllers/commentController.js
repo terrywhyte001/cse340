@@ -44,6 +44,39 @@ commentController.deleteComment = async function (req, res) {
   }
 
   res.redirect(`/inv/detail/${invId}`);
-}
+};
+
+/* *****************************
+ * Handle comment like
+ * ***************************** */
+commentController.likeComment = async function (req, res) {
+  const { comment_id } = req.params;
+  const account_id = res.locals.accountData.account_id;
+  
+  try {
+    // Check if user has already liked the comment
+    const hasLiked = await commentModel.hasUserLikedComment(comment_id, account_id);
+    const comment = await commentModel.getCommentById(comment_id);
+    
+    if (!comment) {
+      req.flash("notice", "Comment not found.");
+      return res.redirect("/");
+    }
+
+    if (hasLiked) {
+      await commentModel.unlikeComment(comment_id, account_id);
+      req.flash("notice", "Like removed.");
+    } else {
+      await commentModel.likeComment(comment_id, account_id);
+      req.flash("notice", "Comment liked!");
+    }
+
+    res.redirect(`/inv/detail/${comment.inv_id}`);
+  } catch (error) {
+    console.error("Error in likeComment controller:", error);
+    req.flash("notice", "Error processing like/unlike.");
+    res.redirect("/");
+  }
+};
 
 module.exports = commentController;

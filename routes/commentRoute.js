@@ -19,4 +19,11 @@ router.post(
   utilities.handleErrors(commentController.deleteComment)
 );
 
+// Route to handle comment likes
+router.post(
+  "/like/:comment_id",
+  utilities.checkLogin,
+  utilities.handleErrors(commentController.likeComment)
+);
+
 module.exports = router;
