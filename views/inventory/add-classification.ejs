@@ -1,18 +1,27 @@
-<h1>Add Classification</h1>
+<div class="classification-container">
+  <h1><%= title %></h1>
 
-<% if (message && message.length) { %>
-  <p class="notice"><%= message %></p>
-<% } %>
+  <h3 class="flash-message"><%- messages() %></h3>
 
-<form action="/inv/add-classification" method="POST">
-  <label for="classificationName">Classification Name</label>
-  <input 
-    type="text" 
-    name="classification_name" 
-    id="classificationName" 
-    required 
-    pattern="^[A-Za-z0-9]+$" 
-    title="No spaces or special characters"
-  >
-  <button type="submit">Add Classification</button>
-</form>
+  <% if (errors) { %>
+  <ul class="flash-message-error">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+
+  <form action="/inv/add-classification" method="post">
+    <label for="account_email">Classification Name:</label>
+    <span class="password-rule">Classification name must be alphabet characters only</span>
+    <input
+      type="text"
+      id="classification_name"
+      name="classification_name"
+      value="<%= locals.classification_name %>"
+      required
+    />
+
+    <button type="submit">Add Classification</button>
+  </form>
+</div>

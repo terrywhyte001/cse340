@@ -1,0 +1,118 @@
+<div class="form-container">
+  <h1><%= title %></h1>
+
+  <% if (errors) { %>
+  <ul class="flash-message-error">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+
+  <form action="/inv/update" method="post" id="updateForm">
+    
+    <input type="hidden" name="inv_id"
+    <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+    <% } %>>
+
+    <!-- Classification -->
+    <label for="inv_classification">Select Classification:</label>
+    <%- classificationSelect %>
+
+    <!-- Inventory Make -->
+    <label for="inv_make">Inventory Make:</label>
+    <input
+      type="text"
+      id="inv_make"
+      name="inv_make"
+      required
+      value="<%= inv_make %>"
+    />
+
+    <!-- Inventory Model -->
+    <label for="inv_model">Inventory Model:</label>
+    <input
+      type="text"
+      id="inv_model"
+      name="inv_model"
+      required
+      value="<%= inv_model %>"
+    />
+
+    <!-- Inventory Description -->
+    <label for="inv_description">Description:</label>
+    <textarea id="inv_description" rows="5" name="inv_description" required>
+          <%= inv_description %>
+      </textarea
+    >
+
+    <!-- Inventory Image Path -->
+    <label for="inv_image">Image Path:</label>
+    <input
+      type="text"
+      id="inv_image"
+      name="inv_image"
+      required
+      value="<%= inv_image %>"
+    />
+
+    <!-- Inventory Thumbnail -->
+    <label for="inv_thumbnail">Thumbnail Path:</label>
+    <input
+      type="text"
+      id="inv_thumbnail"
+      name="inv_thumbnail"
+      required
+      value="<%= inv_thumbnail %>"
+    />
+
+    <!-- Inventory Price -->
+    <label for="inv_price">Price:</label>
+    <input
+      type="number"
+      id="inv_price"
+      name="inv_price"
+      step="0.01"
+      required
+      value="<%= inv_price %>"
+    />
+
+    <!-- Inventory Year -->
+    <label for="inv_year">Year:</label>
+    <input
+      type="number"
+      id="inv_year"
+      name="inv_year"
+      required
+      value="<%= inv_year %>"
+    />
+
+    <!-- Inventory Miles -->
+    <label for="inv_miles">Miles:</label>
+    <input
+      type="number"
+      id="inv_miles"
+      name="inv_miles"
+      pattern="^[0-9]+$"
+      title="Only digits are allowed"
+      required
+      value="<%= inv_miles %>"
+    />
+
+    <!-- Inventory Color -->
+    <label for="inv_color">Color:</label>
+    <input
+      type="text"
+      id="inv_color"
+      name="inv_color"
+      pattern="^[A-Za-z\s]+$"
+      title="Only letters and spaces are allowed"
+      required
+      value="<%= inv_color %>"
+    />
+
+    <button disabled type="submit">Update Vehicle Inventory</button>
+  </form>
+</div>
+
+<script src="../../js/inv-update.js"></script>

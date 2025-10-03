@@ -1,11 +1,63 @@
-<h1><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h1>
+<h1 class="vehicle-detail-title"><%= title %></h1>
 
-<p><strong>Classification:</strong> <%= vehicle.classification_id ? vehicle.classification_id.classification_name : 'N/A' %></p>
-<p><strong>Price:</strong> $<%= vehicle.price.toLocaleString() %></p>
-<p><strong>Mileage:</strong> <%= vehicle.mileage.toLocaleString() %> miles</p>
-<p><strong>Description:</strong> <%= vehicle.description %></p>
+<div class="flash-message"><%- messages() %></div>
 
-<img src="<%= vehicle.image %>" alt="<%= vehicle.make %> <%= vehicle.model %>" style="max-width:300px;">
+    <% if (typeof errors !== 'undefined' && errors.array().length > 0) { %>
+        <ul class="flash-message-error">
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }); %>
+        </ul>
+    <% } %>
 
-<br><br>
-<a href="/inv">Back to Inventory</a>
+<div class="vehicle-container"><%- vehicleDetails %></div>
+
+<hr>
+
+<h2>Client Comments</h2>
+
+<% if (comments && comments.length > 0) { %>
+<ul class="comment-list">
+  <% comments.forEach(comment => { %>
+  <li>
+    <strong
+      ><%= comment.account_firstname %> <%= comment.account_lastname %></strong
+    >
+    <small>(<%= new Date(comment.comment_date).toLocaleString() %>)</small
+    ><br>
+    <div class="comment-body">
+    <p><%= comment.comment_text %></p>
+
+    <% if (user && user.account_id === comment.account_id) { %>
+        <form
+            action="/comment/delete/<%= comment.comment_id %>?invId=<%= vehicle.inv_id %>"
+            method="POST"
+            onsubmit="return confirm('Are you sure you want to delete this comment?');"
+        >
+            <button type="submit" class="comment-delete-btn">Delete</button>
+        </form>
+    <% } %>
+    </div>
+  </li>
+  <% }); %>
+</ul>
+<% } else { %>
+<p>No comments yet. Be the first to leave one!</p>
+<% } %> <% if (user) { %>
+<form action="/comment/add-comment" method="POST" class="comment-form">
+  <label for="comment_text">Leave a Comment:</label><br>
+  <textarea
+    id="comment_text"
+    name="comment_text"
+    rows="4"
+    cols="50"
+    required
+  ></textarea>
+  <input type="hidden" name="inv_id" value="<%= invId %>">
+  <input type="hidden" name="account_id" value="<%= user.account_id %>">
+  <br>
+  <button type="submit">Comment</button>
+</form>
+<% } else { %>
+<p><a href="/account/login">Log in</a> to leave a comment.</p>
+<% } %>

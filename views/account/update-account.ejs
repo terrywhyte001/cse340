@@ -1,0 +1,106 @@
+<div class="form-container">
+  <h1>Update Account</h1>
+
+  <% if (errors) { %>
+  <ul class="flash-message-error">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+
+  <!-- Account Update Form -->
+  <form action="/account/update" method="POST" class="form">
+    <h2>Account Update</h2>
+
+    <label for="firstname">First Name:</label>
+    <input
+      type="text"
+      id="firstname"
+      name="account_firstname"
+      required
+      value="<%= user ? user.account_firstname : '' %>"
+    />
+
+    <label for="lastname">Last Name:</label>
+    <input
+      type="text"
+      id="lastname"
+      name="account_lastname"
+      required
+      value="<%= user ? user.account_lastname : '' %>"
+    />
+
+    <label for="email">Email:</label>
+    <input
+      type="email"
+      id="email"
+      name="account_email"
+      required
+      value="<%= user ? user.account_email : '' %>"
+    />
+
+    <input
+      type="hidden"
+      name="account_id"
+      value="<%= user ? user.account_id : '' %>"
+    />
+
+    <button type="submit">Update Information</button>
+  </form>
+
+  <!-- Password Change Form -->
+  <form action="/account/update-password" method="POST" class="password-form">
+    <h2>Change Password</h2>
+    <p class="password-rule">
+      Enter a new password to update your current password. Password must be at
+      least 8 characters long and contain at least one number and one special
+      character.
+    </p>
+
+    <label for="account_password">New Password:</label>
+    <div class="password-container">
+      <input
+        type="password"
+        id="account_password"
+        name="account_password"
+        required
+        minlength="8"
+      />
+      <span class="toggle-password">
+        <svg id="eyeIcon" viewBox="0 0 24 24" width="24" height="24">
+          <path
+            id="eyeClosed"
+            d="M12 4.5c-5 0-9 5.5-9 7s4 7 9 7 9-5.5 9-7-4-7-9-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"
+          ></path>
+        </svg>
+      </span>
+    </div>
+
+    <input
+      type="hidden"
+      name="account_id"
+      value="<%= user ? user.account_id : '' %>"
+    />
+
+    <button type="submit">Change Password</button>
+  </form>
+</div>
+
+<script>
+  document
+    .querySelector(".toggle-password")
+    .addEventListener("click", function () {
+      const passwordField = document.getElementById("account_password");
+      const eyeIcon = document.getElementById("eyeIcon");
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        eyeIcon.innerHTML =
+          '<path d="M12 4.5c-5 0-9 5.5-9 7s4 7 9 7 9-5.5 9-7-4-7-9-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm-7.07-.07l1.41-1.41A7.92 7.92 0 0 1 4.5 12c0-.87.16-1.7.45-2.49L3.54 8.07C3.2 8.98 3 9.97 3 11c0 1.03.2 2.02.54 2.93l1.39-1.4zm14.14 0l-1.39-1.4c.34-.91.54-1.9.54-2.93 0-1.03-.2-2.02-.54-2.93l1.39-1.4c.34.91.54 1.9.54 2.93 0 1.03-.2 2.02-.54 2.93z"></path>';
+      } else {
+        passwordField.type = "password";
+        eyeIcon.innerHTML =
+          '<path d="M12 4.5c-5 0-9 5.5-9 7s4 7 9 7 9-5.5 9-7-4-7-9-7zm0 12c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"></path>';
+      }
+    });
+</script>

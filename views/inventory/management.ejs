@@ -1,10 +1,42 @@
-<h1>Inventory Management</h1>
+<section class="management">
+  <h1><%= title %></h1>
 
-<% if (message && message.length) { %>
-  <p class="notice"><%= message %></p>
-<% } %>
+  
+  <div class="flash-message"><%- messages() %></div>
 
-<ul>
-  <li><a href="/inv/add-classification">Add Classification</a></li>
-  <li><a href="/inv/add-inventory">Add Vehicle</a></li>
-</ul>
+  <% if (errors) { %>
+  <ul class="flash-message-error">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+
+  <div class="management-link">
+    <p>
+      <a href="/inv/add-classification">Add New Classification</a>
+    </p>
+    <p>
+      <a href="/inv/add-inventory">Add New Vehicle</a>
+    </p>
+  </div>
+
+  <h2>Manage Inventory</h2>
+
+  <p>Choose a classification to see those inventory items</p>
+
+  <div class="width-classificationSelect"><%- classificationSelect %></div>
+  
+  <div class="show-classificionTable">
+    <table id="inventoryDisplay"></table>
+  </div>
+
+  <!-- NoScript Message -->
+  <noscript>
+    <div class="noscript-warning">
+      <p>⚠️ JavaScript must be enabled to use this page properly.</p>
+    </div>
+  </noscript>
+</section>
+
+<script src="../../js/inventory.js"></script>

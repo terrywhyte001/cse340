@@ -1,1 +1,8 @@
-<%- include("../layout", { body: grid }) %>
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<%# messages() %>
+<div class="vehicle-classification">
+    <%- grid %>
+</div>
