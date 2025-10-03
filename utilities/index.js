@@ -44,7 +44,7 @@ Util.buildClassificationGrid = async function (data) {
         " " +
         vehicle.inv_model +
         'details"><img class="img-classification" src="' +
-        vehicle.inv_thumbnail +
+        (vehicle.inv_thumbnail.startsWith('/') ? '' : '/') + vehicle.inv_thumbnail +
         '" alt="Image of ' +
         vehicle.inv_make +
         " " +

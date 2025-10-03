@@ -269,5 +269,11 @@ UPDATE public.inventory SET inv_description = REPLACE(inv_description, 'small in
 
 
 
--- Add /vehicles to the File Paths during insert instead of updating later
--- The image paths in the INSERT statements above already include /vehicles/
+-- Update image paths to match the actual file structure
+UPDATE public.inventory 
+SET 
+  inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
+  inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/')
+WHERE 
+  inv_image NOT LIKE '/images/vehicles/%'
+  OR inv_thumbnail NOT LIKE '/images/vehicles/%';

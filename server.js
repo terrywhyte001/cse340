@@ -48,10 +48,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(utilities.checkJWTToken);
 
+// Serve static files from 'public' directory
+app.use(express.static('public'));
+
 // Flash + messages middleware
 app.use(require("connect-flash")());
 app.use((req, res, next) => {
-  res.locals.messages = require("express-messages")(req, res);
+  res.locals.messages = () => {
+    const messages = req.flash();
+    const output = {};
+    for (const type in messages) {
+      output[type] = messages[type];
+    }
+    return output;
+  };
   next();
 });
 
