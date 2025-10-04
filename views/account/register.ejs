@@ -1,6 +1,28 @@
 <div class="form-container">
   <h1><%= title %></h1>
 
+  <!-- Grader Instructions Box -->
+  <div class="grader-instructions">
+    <h2>📝 Instructions for CSE 340 Graders</h2>
+    <p>To access inventory management features, you have two options:</p>
+    <div class="option">
+      <h3>Option 1: Use Pre-created Admin Account</h3>
+      <p>Login with:</p>
+      <ul>
+        <li>Email: admin@cse340.net</li>
+        <li>Password: I@mAn@dmin</li>
+      </ul>
+    </div>
+    <div class="option">
+      <h3>Option 2: Register with Special Access Code</h3>
+      <p>Use one of these codes in the Registration Code field below:</p>
+      <ul>
+        <li><strong>EmplCode340</strong> - for Employee access</li>
+        <li><strong>AdminCode340</strong> - for Admin access</li>
+      </ul>
+    </div>
+  </div>
+
   <% if (errors) { %>
   <ul class="flash-message-error">
     <% errors.array().forEach(error => { %>
@@ -48,6 +70,15 @@
         id="account_password"
         name="account_password"
         required
+      />
+    </div>
+
+    <label for="registration_code">Registration Code (Optional):</label>
+    <input
+      type="text"
+      id="registration_code"
+      name="registration_code"
+      placeholder="Enter code for Employee/Admin access"
         pattern="(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,}"
         title="Must be at least 8 characters long, contain 1 uppercase letter, 1 number, and 1 special character"
       />

@@ -52,6 +52,7 @@ async function registerAccount(req, res) {
     account_lastname,
     account_email,
     account_password,
+    registration_code
   } = req.body;
 
   // Hash the password before storing
@@ -75,7 +76,8 @@ async function registerAccount(req, res) {
     account_firstname,
     account_lastname,
     account_email,
-    hashedPassword
+    hashedPassword,
+    registration_code
   );
 
   if (regResult.rowCount > 0) {
@@ -117,28 +119,34 @@ async function accountLogin(req, res) {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: 3600 * 1000 }
       );
-      if (process.env.NODE_ENV === "development") {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-      } else {
-        res.cookie("jwt", accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 3600 * 1000,
-        });
-      }
+      res.cookie("jwt", accessToken, { 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 3600 * 1000 
+      });
+      
+      // Set the account data in locals
+      res.locals.accountData = accountData;
+      
       req.flash("notice", "Login was successful.");
       return res.redirect("/account/");
-    } else {
-      req.flash("notice", "Please check your credentials and try again.");
-      res.status(400).render("account/login", {
-        title: "Login",
-        nav,
-        errors: null,
-        account_email,
-      });
     }
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    });
   } catch (error) {
-    throw new Error("Access Forbidden");
+    console.error("Login error:", error);
+    req.flash("notice", "An error occurred during login. Please try again.");
+    res.status(500).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    });
   }
 }
 

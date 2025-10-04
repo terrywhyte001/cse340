@@ -6,6 +6,34 @@ const commentModel = require("../models/comment-model");
 const invCont = {};
 
 /* ****************************************
+ *  Deliver inventory management view
+ * *************************************** */
+invCont.showManagementView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const classificationSelect = await utilities.buildClassificationList();
+  
+  res.render("./inventory/management", {
+    title: "Vehicle Management",
+    nav,
+    errors: null,
+    classificationSelect
+  });
+};
+
+/* ****************************************
+ *  Get Inventory Items By Classification
+ * *************************************** */
+invCont.getInventoryJSON = async function (req, res, next) {
+  const classification_id = req.params.classification_id;
+  const invData = await invModel.getInventoryByClassificationId(classification_id);
+  if (invData[0].inv_id) {
+    return res.json(invData);
+  } else {
+    next(new Error("No data returned"));
+  }
+};
+
+/* ****************************************
  *  Show Add Inventory View
  * *************************************** */
 invCont.showAddInventoryView = async function (req, res, next) {

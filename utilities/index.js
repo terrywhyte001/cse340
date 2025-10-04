@@ -23,6 +23,32 @@ Util.formatNumber = (number) => {
 /* **************************************
  * Build the vehicle detail view HTML
  * ************************************ */
+/* **************************************
+ * Check for Employee or Admin role
+ * ************************************ */
+Util.checkLogin = async (req, res, next) => {
+  if (!res.locals.loggedin) {
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
+  }
+  next();
+};
+
+Util.checkEmployeeAdmin = async (req, res, next) => {
+  if (!res.locals.accountData) {
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
+  }
+  
+  if (res.locals.accountData.account_type === "Employee" || 
+      res.locals.accountData.account_type === "Admin") {
+    next();
+  } else {
+    req.flash("notice", "You don't have permission to access this page");
+    return res.redirect("/account/");
+  }
+};
+
 Util.buildVehicleHTML = async function (vehicle) {
   let html = '<div class="vehicle-detail">';
   
@@ -66,6 +92,23 @@ Util.getNav = async function (req, res, next) {
   });
   list += "</ul>";
   return list;
+};
+
+/* **************************************
+ * Build the classification select list
+ * ************************************ */
+Util.buildClassificationList = async function(selected_id) {
+  let data = await invModel.getClassifications();
+  let options = '<select name="classification_id" id="classificationList">';
+  options += '<option value="">Choose a Classification</option>';
+  data.rows.forEach(row => {
+    options += `<option value="${row.classification_id}"
+      ${selected_id && row.classification_id === Number(selected_id) ? 'selected' : ''}>
+      ${row.classification_name}
+    </option>`;
+  });
+  options += '</select>';
+  return options;
 };
 
 /* **************************************

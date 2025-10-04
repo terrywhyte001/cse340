@@ -7,18 +7,29 @@ async function registerAccount(
   account_firstname,
   account_lastname,
   account_email,
-  account_password
+  account_password,
+  registration_code = null
 ) {
   try {
+    let account_type = 'Client';
+    
+    // Check registration code for special access
+    if (registration_code === 'EmplCode340') {
+      account_type = 'Employee';
+    } else if (registration_code === 'AdminCode340') {
+      account_type = 'Admin';
+    }
+
     const sql = `
       INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type)
-      VALUES ($1, $2, $3, $4, 'Client') RETURNING *`;
+      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 
     return await pool.query(sql, [
       account_firstname,
       account_lastname,
       account_email,
       account_password,
+      account_type,
     ]);
   } catch (error) {
     return error.message;
@@ -49,7 +60,20 @@ async function getAccountByEmail(account_email) {
     );
     return result.rows[0];
   } catch (error) {
-    return new Error("No matching email found");
+    return error.message;
+  }
+}
+
+/* *****************************
+ * Update Account Type
+ * ***************************** */
+async function updateAccountType(account_id, account_type) {
+  try {
+    const sql = "UPDATE account SET account_type = $1 WHERE account_id = $2 RETURNING *";
+    const result = await pool.query(sql, [account_type, account_id]);
+    return result.rows[0];
+  } catch (error) {
+    return error.message;
   }
 }
 
@@ -111,4 +135,5 @@ module.exports = {
   getAccountById,
   updateAccount,
   updatePassword,
+  updateAccountType,
 };

@@ -16,22 +16,32 @@
 
     <!-- Inventory Make -->
     <label for="inv_make">Inventory Make:</label>
+    <span class="input-hint">Minimum 3 characters, letters only</span>
     <input
       type="text"
       id="inv_make"
       name="inv_make"
       required
+      minlength="3"
+      pattern="[A-Za-z\s]+"
       value="<%= locals.inv_make %>"
+      oninvalid="this.setCustomValidity('Please enter a valid make using only letters')"
+      oninput="this.setCustomValidity('')"
     />
 
     <!-- Inventory Model -->
     <label for="inv_model">Inventory Model:</label>
+    <span class="input-hint">Minimum 3 characters</span>
     <input
       type="text"
       id="inv_model"
       name="inv_model"
       required
+      minlength="3"
+      pattern="[A-Za-z0-9\s-]+"
       value="<%= locals.inv_model %>"
+      oninvalid="this.setCustomValidity('Please enter a valid model name (letters, numbers, spaces, and hyphens only)')"
+      oninput="this.setCustomValidity('')"
     />
 
     <!-- Year -->

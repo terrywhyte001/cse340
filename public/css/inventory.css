@@ -1,0 +1,80 @@
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.input-hint {
+  display: block;
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+input:invalid,
+textarea:invalid {
+  border-color: #ff4444;
+}
+
+input:valid,
+textarea:valid {
+  border-color: #44aa44;
+}
+
+.flash-message-error {
+  color: #ff4444;
+  list-style: none;
+  padding: 10px;
+  background: #fff8f8;
+  border: 1px solid #ff4444;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.flash-message {
+  padding: 10px;
+  background: #e8f5e9;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+}
+
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Responsive design */
+@media screen and (max-width: 600px) {
+  .form-container {
+    padding: 10px;
+  }
+}

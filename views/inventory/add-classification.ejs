@@ -12,14 +12,18 @@
   <% } %>
 
   <form action="/inv/add-classification" method="post">
-    <label for="account_email">Classification Name:</label>
+    <label for="classification_name">Classification Name:</label>
     <span class="password-rule">Classification name must be alphabet characters only</span>
     <input
       type="text"
       id="classification_name"
       name="classification_name"
       value="<%= locals.classification_name %>"
+      pattern="^[A-Za-z\s]+$"
+      minlength="3"
       required
+      oninput="this.setCustomValidity('')"
+      oninvalid="this.setCustomValidity('Please enter a valid classification name using only letters and spaces')"
     />
 
     <button type="submit">Add Classification</button>

@@ -8,9 +8,63 @@
   --light-bg: #fff; /* light Background */
   --light-text: #ffff; /* Light white Text */
   --btn-hover: #0d2565;
+  --primary-green: #4CAF50; /* For grader instructions */
   --font-body: "Roboto", sans-serif;
   --flash-notify-error: #a32f2f;
   --flash-notify-success: #367d0d;
+}
+
+/* Grader Instructions Styles */
+.grader-instructions {
+    background-color: var(--light-bg);
+    border: 2px solid var(--primary-green);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.grader-instructions h2 {
+    color: var(--primary-blue);
+    margin-top: 0;
+    border-bottom: 2px solid var(--primary-green);
+    padding-bottom: 10px;
+}
+
+.grader-instructions .option {
+    background-color: var(--light-bg);
+    border: 1px solid var(--accent-silver);
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.grader-instructions h3 {
+    color: var(--primary-green);
+    margin-top: 0;
+}
+
+.grader-instructions ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+.grader-instructions li {
+    margin: 5px 0;
+    color: var(--primary-blue);
+}
+
+.grader-instructions li strong {
+    background-color: #e8f5e9;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Style for the registration code input */
+#registration_code {
+    border: 2px dashed var(--primary-green);
+    padding: 8px;
+    margin-top: 5px;
 }
 
 * {

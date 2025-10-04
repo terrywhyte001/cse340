@@ -68,13 +68,10 @@ validate.checkRegData = async (req, res, next) => {
 
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
-    const account_id = res.locals.accountData.account_id;
-    const account = await accountModel.getAccountById(account_id);
     res.render("account/register", {
       errors,
       title: "Register",
       nav,
-      user: account,
       account_firstname,
       account_lastname,
       account_email,

@@ -11,20 +11,23 @@ router.get("/type/:classificationId", utilities.handleErrors(invController.build
 // Route for vehicle detail view
 router.get("/detail/:invId", utilities.handleErrors(invController.buildVehicleById));
 
-// Management routes - protected by login and role
+// Management routes
 router.get("/", 
   utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
   utilities.handleErrors(invController.showManagementView)
 );
 
 // Add classification routes
 router.get("/add-classification", 
   utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
   utilities.handleErrors(invController.showAddClassificationView)
 );
 
 router.post("/add-classification",
   utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
   validate.classificationRules(),
   validate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
@@ -33,11 +36,13 @@ router.post("/add-classification",
 // Add inventory routes
 router.get("/add-inventory", 
   utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
   utilities.handleErrors(invController.showAddInventoryView)
 );
 
 router.post("/add-inventory",
   utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
   validate.inventoryRules(),
   validate.checkInvData,
   utilities.handleErrors(invController.addInventory)

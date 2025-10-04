@@ -19,8 +19,11 @@ const bodyParser = require("body-parser");
 const accountRoute = require("./routes/accountRoute");
 const commentRoute = require("./routes/commentRoute");
 const errorRoute = require("./routes/errorRoute");
+const adminRoute = require("./routes/adminRoute");
 const session = require("express-session");
 const db = require("./database"); // ✅ this exports { query, pool }
+const jwtAuth = require("./middleware/jwtAuth");
+const flash = require("connect-flash");
 
 /* ***********************
  * Middleware
@@ -46,7 +49,28 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(utilities.checkJWTToken);
+app.use(flash());
+app.use(jwtAuth.verifyToken);
+
+// Messages middleware
+app.use((req, res, next) => {
+  res.locals.messages = () => {
+    const messages = req.flash();
+    const formattedMessages = [];
+    for (let type in messages) {
+      messages[type].forEach(msg => {
+        formattedMessages.push(msg);
+      });
+    }
+    return formattedMessages.join('<br>');
+  };
+  next();
+});
+
+// Route for admin functions
+app.use("/admin", adminRoute);
+// Flash messages
+app.use(require("connect-flash")());
 
 // Serve static files from 'public' directory
 app.use(express.static('public'));
