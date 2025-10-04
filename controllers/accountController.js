@@ -112,25 +112,41 @@ async function accountLogin(req, res) {
     return;
   }
   try {
+    console.log('Login attempt for:', account_email);
+    console.log('Environment variables:', {
+      NODE_ENV: process.env.NODE_ENV,
+      ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ? 'Set' : 'Not set',
+      SESSION_SECRET: process.env.SESSION_SECRET ? 'Set' : 'Not set'
+    });
+
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
       if (!process.env.ACCESS_TOKEN_SECRET) {
-        console.error("ACCESS_TOKEN_SECRET is not set!");
-        throw new Error("Server configuration error");
+        console.error("ACCESS_TOKEN_SECRET is not set in environment!");
+        throw new Error("Server configuration error - Missing ACCESS_TOKEN_SECRET");
       }
+      console.log('Creating JWT token...');
       const accessToken = jwt.sign(
         accountData,
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: 3600 * 1000 }
       );
-      console.log("Token secret available:", !!process.env.ACCESS_TOKEN_SECRET);
+      console.log('JWT token created successfully');
+      
+      console.log('Setting cookie with options:', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 3600 * 1000
+      });
+      
       res.cookie("jwt", accessToken, { 
         httpOnly: true, 
         secure: true,
         sameSite: 'none',
         maxAge: 3600 * 1000 
       });
-      console.log("Token set:", accessToken); // Debug logging
+      console.log('Cookie set successfully');
       
       // Set the account data in locals
       res.locals.accountData = accountData;
@@ -146,8 +162,25 @@ async function accountLogin(req, res) {
       account_email,
     });
   } catch (error) {
-    console.error("Login error:", error);
-    req.flash("notice", "An error occurred during login. Please try again.");
+    console.error("Login error details:", {
+      error: error.message,
+      stack: error.stack,
+      email: account_email,
+      envVars: {
+        NODE_ENV: process.env.NODE_ENV,
+        ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ? 'Set' : 'Not set',
+        SESSION_SECRET: process.env.SESSION_SECRET ? 'Set' : 'Not set'
+      }
+    });
+    
+    let errorMessage = "An error occurred during login. ";
+    if (error.message.includes("ACCESS_TOKEN_SECRET")) {
+      errorMessage += "Server configuration error. Please contact support.";
+    } else {
+      errorMessage += "Please try again.";
+    }
+    
+    req.flash("notice", errorMessage);
     res.status(500).render("account/login", {
       title: "Login",
       nav,

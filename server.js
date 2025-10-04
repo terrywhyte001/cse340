@@ -109,11 +109,21 @@ app.use(async (req, res, next) => {
  *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  let message =
-    err.status === 404
-      ? err.message
-      : "Oh no! There was a crash. Maybe try a different route?";
+  console.error('Error details:', {
+    url: req.originalUrl,
+    method: req.method,
+    message: err.message,
+    stack: err.stack,
+    status: err.status,
+    env: process.env.NODE_ENV
+  });
+  
+  let message = err.status === 404
+    ? err.message
+    : process.env.NODE_ENV === 'development'
+      ? `Error: ${err.message}`
+      : "An error occurred. Please try again later.";
+      
   res.status(err.status || 500).render("errors/error", {
     title: err.status || "Server Error",
     message,
