@@ -11,7 +11,6 @@ baseController.buildHome = async function (req, res) {
     const account_id = res.locals.accountData.account_id;
     account = await accountModel.getAccountById(account_id);
   }
-  req.flash("notice", "This is a flash message.");
   res.render("index", { 
     title: "Home", 
     nav, 
