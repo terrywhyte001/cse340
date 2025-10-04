@@ -25,6 +25,15 @@ const db = require("./database"); // ✅ this exports { query, pool }
 const jwtAuth = require("./middleware/jwtAuth");
 const flash = require("connect-flash");
 
+// Validate required environment variables
+const requiredEnvVars = ['ACCESS_TOKEN_SECRET', 'SESSION_SECRET', 'DATABASE_URL'];
+requiredEnvVars.forEach(varName => {
+  if (!process.env[varName]) {
+    console.error(`Error: Environment variable ${varName} is not set!`);
+    process.exit(1);
+  }
+});
+
 /* ***********************
  * Middleware
  *************************/
@@ -33,12 +42,12 @@ const pgSession = require("connect-pg-simple")(session);
 app.use(
   session({
     store: new pgSession({
-      pool: db.pool, // ✅ actual pool
+      pool: db.pool,
       createTableIfMissing: true,
     }),
     secret: process.env.SESSION_SECRET,
-    resave: false, // best practice
-    saveUninitialized: false, // best practice
+    resave: false,
+    saveUninitialized: false,
     name: "sessionId",
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
@@ -50,7 +59,6 @@ app.use(
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(jwtAuth.verifyToken);
@@ -70,27 +78,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Route for admin functions
-app.use("/admin", adminRoute);
-// Flash messages
-app.use(require("connect-flash")());
-
 // Serve static files from 'public' directory
 app.use(express.static('public'));
-
-// Flash + messages middleware
-app.use(require("connect-flash")());
-app.use((req, res, next) => {
-  res.locals.messages = () => {
-    const messages = req.flash();
-    const output = {};
-    for (const type in messages) {
-      output[type] = messages[type];
-    }
-    return output;
-  };
-  next();
-});
 
 /* ***********************
  * View Engine and Templates
@@ -108,6 +97,7 @@ app.use("/inv", inventoryRoute);
 app.use("/account", accountRoute);
 app.use("/comment", commentRoute);
 app.use("/error", errorRoute);
+app.use("/admin", adminRoute);
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

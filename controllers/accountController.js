@@ -114,11 +114,16 @@ async function accountLogin(req, res) {
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
+      if (!process.env.ACCESS_TOKEN_SECRET) {
+        console.error("ACCESS_TOKEN_SECRET is not set!");
+        throw new Error("Server configuration error");
+      }
       const accessToken = jwt.sign(
         accountData,
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: 3600 * 1000 }
       );
+      console.log("Token secret available:", !!process.env.ACCESS_TOKEN_SECRET);
       res.cookie("jwt", accessToken, { 
         httpOnly: true, 
         secure: true,
