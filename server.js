@@ -52,7 +52,9 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
       secure: true,
-      sameSite: 'none'
+      sameSite: 'none',
+      path: '/',
+      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
     },
   })
 );
@@ -65,10 +67,13 @@ app.use(jwtAuth.verifyToken);
 
 // Messages middleware
 app.use((req, res, next) => {
-  res.locals.messages = () => {
+  res.locals.messages = function() {
     const messages = req.flash();
+    if (Object.keys(messages).length === 0) {
+      return null;
+    }
     const formattedMessages = [];
-    for (let type in messages) {
+    for (const type in messages) {
       messages[type].forEach(msg => {
         formattedMessages.push(msg);
       });
@@ -109,11 +114,31 @@ app.use(async (req, res, next) => {
  *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  let message =
-    err.status === 404
-      ? err.message
-      : "Oh no! There was a crash. Maybe try a different route?";
+  
+  // Detailed error logging
+  console.error('Error details:', {
+    url: req.originalUrl,
+    method: req.method,
+    message: err.message,
+    stack: err.stack,
+    status: err.status || 500,
+    env: process.env.NODE_ENV
+  });
+  
+  // User-friendly error message
+  let message;
+  if (err.status === 404) {
+    message = err.message;
+  } else if (process.env.NODE_ENV === 'development') {
+    message = `Error: ${err.message}`;
+  } else if (err.message.includes('ACCESS_TOKEN_SECRET')) {
+    message = "Server configuration error. Please contact administrator.";
+  } else if (err.message.includes('jwt')) {
+    message = "Authentication error. Please try logging in again.";
+  } else {
+    message = "An error occurred. Please try again later.";
+  }
+  
   res.status(err.status || 500).render("errors/error", {
     title: err.status || "Server Error",
     message,

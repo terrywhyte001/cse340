@@ -1,4 +1,7 @@
 <%# Only show flash messages if they exist %>
-<% if (messages()) { %>
-  <div class="flash-message"><%- messages() %></div>
+<% if (typeof messages === 'function') { %>
+  <% const flashMessages = messages(); %>
+  <% if (flashMessages) { %>
+    <div class="flash-message"><%- flashMessages %></div>
+  <% } %>
 <% } %>

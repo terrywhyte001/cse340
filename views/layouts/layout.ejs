@@ -4,11 +4,11 @@
 
   <body>
     <div id="wrapper">
-      <%- include('../partials/header') %> 
-      <%- include('../partials/navigation')%>
-      <%- include('../partials/flash') %>
+      <%- include('../partials/header', { messages: messages }) %> 
+      <%- include('../partials/navigation', { messages: messages })%>
+      <%- include('../partials/flash', { messages: messages }) %>
       <main><%- body %></main>
-      <%- include('../partials/footer')%>
+      <%- include('../partials/footer', { messages: messages })%>
     </div>
   </body>
 </html>
