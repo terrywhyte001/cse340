@@ -55,7 +55,7 @@ validate.registationRules = () => {
         minNumbers: 1,
         minSymbols: 1,
       })
-      .withMessage("Password does not meet requirements."),
+      .withMessage("Password must be at least 8 characters and contain 1 uppercase letter, 1 number, and 1 special character."),
   ];
 };
 
