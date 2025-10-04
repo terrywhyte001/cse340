@@ -121,9 +121,11 @@ async function accountLogin(req, res) {
       );
       res.cookie("jwt", accessToken, { 
         httpOnly: true, 
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: 'none',
         maxAge: 3600 * 1000 
       });
+      console.log("Token set:", accessToken); // Debug logging
       
       // Set the account data in locals
       res.locals.accountData = accountData;

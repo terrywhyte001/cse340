@@ -42,12 +42,15 @@ app.use(
     name: "sessionId",
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: true,
+      sameSite: 'none'
     },
   })
 );
 
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(jwtAuth.verifyToken);

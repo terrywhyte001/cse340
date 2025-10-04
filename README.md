@@ -17,8 +17,9 @@ Password: I@mAn@dmin
 1. Go to http://localhost:3000/account/register
 2. Fill out the registration form
 3. Use one of these special access codes:
-   - For Employee access: `EmplCode340`
-   - For Admin access: `AdminCode340`
+   - For Employee access: `Empl!340`
+   - For Admin access: `Admin!340`
+   Note: These codes include the special character (!) to meet security requirements
 4. Submit and log in
 
 ### Features Available After Login

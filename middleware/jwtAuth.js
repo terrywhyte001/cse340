@@ -5,6 +5,7 @@ const jwtAuth = {};
 
 jwtAuth.verifyToken = (req, res, next) => {
   const token = req.cookies.jwt;
+  console.log("Cookie received:", token); // Debug logging
   
   if (!token) {
     res.locals.accountData = null;

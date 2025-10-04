@@ -14,9 +14,9 @@ async function registerAccount(
     let account_type = 'Client';
     
     // Check registration code for special access
-    if (registration_code === 'EmplCode340') {
+    if (registration_code === "Empl!340") {
       account_type = 'Employee';
-    } else if (registration_code === 'AdminCode340') {
+    } else if (registration_code === "Admin!340") {
       account_type = 'Admin';
     }
 
