@@ -16,7 +16,8 @@ invCont.showManagementView = async function (req, res, next) {
     title: "Vehicle Management",
     nav,
     errors: null,
-    classificationSelect
+    classificationSelect,
+    user: res.locals.accountData
   });
 };
 
@@ -84,7 +85,7 @@ invCont.addInventory = async function (req, res) {
       "notice",
       `The ${inv_make} ${inv_model} was successfully added.`
     );
-    res.redirect("/inv/management");
+    res.redirect("/inv/");
   } else {
     req.flash("notice", "Sorry, adding the vehicle failed.");
     res.status(501).render("inventory/add-inventory", {
@@ -117,6 +118,7 @@ invCont.showManagementView = async function (req, res, next) {
     nav,
     errors: null,
     classificationSelect,
+    user: res.locals.accountData
   });
 };
 

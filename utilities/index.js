@@ -339,7 +339,7 @@ Util.buildManagementLinks = function(accountData) {
   if (accountData && (accountData.account_type === 'Employee' || accountData.account_type === 'Admin')) {
     links += '<h3>Management</h3>';
     links += '<ul>';
-    links += '<li><a href="/inv/management">Inventory Management</a></li>';
+    links += '<li><a href="/inv/">Inventory Management</a></li>';
     links += '<li><a href="/inv/add-classification">Add Classification</a></li>';
     links += '<li><a href="/inv/add-inventory">Add Vehicle</a></li>';
     

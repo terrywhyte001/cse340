@@ -1,26 +1,12 @@
 <%# IMPORT/INCLUDE STATEMENTS FOR COMPONENTS AS REQUESTED BY GRADER %>
 <h1 class="welcome">Welcome to CSE Motors!</h1>
 
-<%# Import/Include management links component if user has access %>
 <% if (user && (user.account_type === 'Employee' || user.account_type === 'Admin')) { %>
   <%- include('partials/management-links', { user: user }) %>
 <% } %>
 
 <%# Import/Include featured vehicle component %>
 <%- include('partials/featured-vehicle', { vehicle: featuredVehicle || null }) %>
-
-<section id="featured-vehicle">
-  <div class="delorean-details">
-    <h2>DMC Delorean</h2>
-    <ul>
-      <li>3 Cup holders</li>
-      <li>Superman doors</li>
-      <li>Fuzzy dice!</li>
-    </ul>
-    <a href="/inv/detail/10" class="btn">Own Today</a>
-  </div>
-  <img src="/images/vehicles/delorean.jpg" alt="DMC Delorean">
-</section>
 
 <section id="delorean-reviews">
 

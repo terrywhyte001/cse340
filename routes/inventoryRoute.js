@@ -18,6 +18,13 @@ router.get("/",
   utilities.handleErrors(invController.showManagementView)
 );
 
+// Alternative management route
+router.get("/management", 
+  utilities.checkLogin,
+  utilities.checkEmployeeAdmin,
+  utilities.handleErrors(invController.showManagementView)
+);
+
 // Add classification routes
 router.get("/add-classification", 
   utilities.checkLogin,
