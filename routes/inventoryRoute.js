@@ -9,7 +9,7 @@ const validate = require("../utilities/management-validation");
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
 
 // Route for vehicle detail view
-router.get("/detail/:invId", utilities.handleErrors(invController.buildVehicleById));
+router.get("/detail/:invId", utilities.handleErrors(invController.buildByInvId));
 
 // Management routes
 router.get("/", 
