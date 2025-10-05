@@ -285,6 +285,122 @@ Util.authorizeAdminOrEmployee = (req, res, next) => {
   next();
 };
 
+/* **************************************
+ * Build Comments HTML Component
+ * ************************************ */
+Util.buildCommentsHTML = function(comments, user, invId) {
+  let html = '<div class="comments-section">';
+  
+  if (comments && comments.length > 0) {
+    html += '<h3>Customer Comments</h3>';
+    comments.forEach(comment => {
+      html += '<div class="comment-item">';
+      html += `<strong>${comment.account_firstname} ${comment.account_lastname}</strong>`;
+      html += `<small> - ${new Date(comment.comment_date).toLocaleString()}</small>`;
+      html += `<p>${comment.comment_text}</p>`;
+      if (user) {
+        html += '<div class="comment-actions">';
+        html += `<form action="/comment/like" method="POST" style="display:inline;">`;
+        html += `<input type="hidden" name="comment_id" value="${comment.comment_id}">`;
+        html += `<input type="hidden" name="inv_id" value="${invId}">`;
+        html += `<button type="submit" class="like-btn ${comment.hasLiked ? 'liked' : ''}">`;
+        html += `👍 ${comment.like_count || 0}</button>`;
+        html += '</form>';
+        html += '</div>';
+      }
+      html += '</div><hr>';
+    });
+  } else {
+    html += '<p>No comments yet. Be the first to share your thoughts!</p>';
+  }
+  
+  // Add comment form for logged-in users
+  if (user) {
+    html += '<div class="add-comment">';
+    html += '<h4>Add Your Comment</h4>';
+    html += '<form action="/comment/add" method="POST">';
+    html += `<input type="hidden" name="inv_id" value="${invId}">`;
+    html += '<textarea name="comment_text" rows="4" cols="50" placeholder="Share your thoughts..." required></textarea><br>';
+    html += '<button type="submit" class="btn">Add Comment</button>';
+    html += '</form>';
+    html += '</div>';
+  }
+  
+  html += '</div>';
+  return html;
+};
+
+/* **************************************
+ * Build Management Links Component
+ * ************************************ */
+Util.buildManagementLinks = function(accountData) {
+  let links = '<div class="management-links">';
+  
+  if (accountData && (accountData.account_type === 'Employee' || accountData.account_type === 'Admin')) {
+    links += '<h3>Management</h3>';
+    links += '<ul>';
+    links += '<li><a href="/inv/management">Inventory Management</a></li>';
+    links += '<li><a href="/inv/add-classification">Add Classification</a></li>';
+    links += '<li><a href="/inv/add-inventory">Add Vehicle</a></li>';
+    
+    if (accountData.account_type === 'Admin') {
+      links += '<li><a href="/admin">Admin Panel</a></li>';
+    }
+    
+    links += '</ul>';
+  }
+  
+  links += '</div>';
+  return links;
+};
+
+/* **************************************
+ * Build Vehicle Card Component
+ * ************************************ */
+Util.buildVehicleCard = function(vehicle) {
+  let card = '<div class="vehicle-card">';
+  card += `<a href="/inv/detail/${vehicle.inv_id}">`;
+  card += `<img src="${vehicle.inv_thumbnail}" alt="${vehicle.inv_make} ${vehicle.inv_model}">`;
+  card += `<h3>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h3>`;
+  card += `<p class="price">$${new Intl.NumberFormat("en-US").format(vehicle.inv_price)}</p>`;
+  card += '</a>';
+  card += '</div>';
+  return card;
+};
+
+/* **************************************
+ * Build Header Component
+ * ************************************ */
+Util.buildHeaderComponent = function(accountData) {
+  let header = '<div class="header-tools">';
+  
+  if (accountData) {
+    header += `<span>Welcome, ${accountData.account_firstname}!</span>`;
+    header += '<a href="/account/">My Account</a>';
+    header += '<a href="/account/logout">Logout</a>';
+  } else {
+    header += '<a href="/account/login">My Account</a>';
+  }
+  
+  header += '</div>';
+  return header;
+};
+
+/* **************************************
+ * Build Navigation Component
+ * ************************************ */
+Util.buildNavComponent = async function() {
+  const nav = await Util.getNav();
+  return `<nav class="main-navigation">${nav}</nav>`;
+};
+
+/* **************************************
+ * Build Footer Error Component (Week 3)
+ * ************************************ */
+Util.buildFooterError = function() {
+  return '<a href="/error/trigger" class="footer-error-link">Trigger Error</a>';
+};
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for

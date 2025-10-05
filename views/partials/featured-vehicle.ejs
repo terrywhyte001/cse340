@@ -1,0 +1,109 @@
+<%# Featured Vehicle Component - EXPORTED COMPONENT %>
+<% if (vehicle) { %>
+  <section class="featured-vehicle-component">
+    <h2>Featured Vehicle</h2>
+    <div class="featured-content">
+      <div class="vehicle-image">
+        <img src="<%= vehicle.inv_image %>" alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+      </div>
+      <div class="vehicle-info">
+        <h3><%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %></h3>
+        <p class="price">Starting at <%= new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(vehicle.inv_price) %></p>
+        <p class="description"><%= vehicle.inv_description %></p>
+        <a href="/inv/detail/<%= vehicle.inv_id %>" class="btn btn-primary">View Details</a>
+      </div>
+    </div>
+  </section>
+<% } else { %>
+  <%# Default featured content when no specific vehicle is featured %>
+  <section class="featured-vehicle-component">
+    <h2>Featured This Week</h2>
+    <div class="featured-content">
+      <div class="vehicle-image">
+        <img src="/images/vehicles/delorean.jpg" alt="DMC Delorean">
+      </div>
+      <div class="vehicle-info">
+        <h3>1981 DMC Delorean</h3>
+        <p class="price">Starting at $55,000</p>
+        <p class="description">The iconic time machine that captured hearts in the 80s. Complete with gull-wing doors and that distinctive stainless steel body.</p>
+        <a href="/inv/detail/10" class="btn btn-primary">Own Today</a>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+<style>
+.featured-vehicle-component {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.featured-vehicle-component h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 2rem;
+}
+
+.featured-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.vehicle-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.vehicle-info .price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #27ae60;
+  margin-bottom: 1rem;
+}
+
+.vehicle-info .description {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .featured-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .featured-vehicle-component {
+    padding: 1rem;
+  }
+}
+</style>

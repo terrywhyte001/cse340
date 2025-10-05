@@ -12,6 +12,9 @@
   </ul>
   <% } %>
 
+  <%# IMPORT STATEMENT: Include management links component %>
+  <%- include('../partials/management-links', { user: res.locals.accountData || user }) %>
+  
   <div class="management-link">
     <p>
       <a href="/inv/add-classification">Add New Classification</a>

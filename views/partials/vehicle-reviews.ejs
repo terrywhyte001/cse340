@@ -1,0 +1,79 @@
+<%# Vehicle Reviews Component - EXPORTED COMPONENT %>
+<div class="vehicle-reviews-component">
+  <h2>Customer Reviews</h2>
+  <% if (reviews && reviews.length > 0) { %>
+    <ul class="reviews-list">
+      <% reviews.forEach(review => { %>
+        <li class="review-item">
+          <span class="review-text">"<%= review.text %>"</span>
+          <span class="review-rating">(<%= review.rating %>/5)</span>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <%# Default reviews when no specific reviews are provided %>
+    <ul class="reviews-list">
+      <li class="review-item">
+        <span class="review-text">"So fast it's almost like traveling in time."</span>
+        <span class="review-rating">(4/5)</span>
+      </li>
+      <li class="review-item">
+        <span class="review-text">"Coolest ride on the road."</span>
+        <span class="review-rating">(4/5)</span>
+      </li>
+      <li class="review-item">
+        <span class="review-text">"I'm feeling McFly!"</span>
+        <span class="review-rating">(5/5)</span>
+      </li>
+      <li class="review-item">
+        <span class="review-text">"The most futuristic ride of our day."</span>
+        <span class="review-rating">(4/5)</span>
+      </li>
+      <li class="review-item">
+        <span class="review-text">"80's livin and I love it!"</span>
+        <span class="review-rating">(5/5)</span>
+      </li>
+    </ul>
+  <% } %>
+</div>
+
+<style>
+.vehicle-reviews-component {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.vehicle-reviews-component h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+}
+
+.reviews-list {
+  list-style: none;
+  padding: 0;
+}
+
+.review-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-text {
+  font-style: italic;
+  color: #555;
+}
+
+.review-rating {
+  font-weight: bold;
+  color: #f39c12;
+  margin-left: 0.5rem;
+}
+</style>

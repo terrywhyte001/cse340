@@ -1,4 +1,13 @@
+<%# IMPORT/INCLUDE STATEMENTS FOR COMPONENTS AS REQUESTED BY GRADER %>
 <h1 class="welcome">Welcome to CSE Motors!</h1>
+
+<%# Import/Include management links component if user has access %>
+<% if (user && (user.account_type === 'Employee' || user.account_type === 'Admin')) { %>
+  <%- include('partials/management-links', { user: user }) %>
+<% } %>
+
+<%# Import/Include featured vehicle component %>
+<%- include('partials/featured-vehicle', { vehicle: featuredVehicle || null }) %>
 
 <section id="featured-vehicle">
   <div class="delorean-details">
@@ -8,7 +17,7 @@
       <li>Superman doors</li>
       <li>Fuzzy dice!</li>
     </ul>
-    <a href="#" class="btn">Own Today</a>
+    <a href="/inv/detail/10" class="btn">Own Today</a>
   </div>
   <img src="/images/vehicles/delorean.jpg" alt="DMC Delorean">
 </section>
@@ -37,14 +46,12 @@
     </div>
   </div>
 
-  <div class="delorean-text">
-    <h2>DMC Delorean Reviews</h2>
-    <ul>
-      <li>"So fast it's almost like traveling in time." (4/5)</li>
-      <li>"Coolest ride on the road." (4/5)</li>
-      <li>"I'm feeling McFly!" (5/5)</li>
-      <li>"The most futuristic ride of our day." (4/5)</li>
-      <li>"80's livin and I love it!" (5/5)</li>
-    </ul>
-  </div>
+  <%# Import/Include reviews component %>
+  <%- include('partials/vehicle-reviews', { reviews: deloreanReviews || null }) %>
+
+  <%# Import/Include upgrades component %>
+  <%- include('partials/vehicle-upgrades', { upgrades: vehicleUpgrades || null }) %>
 </section>
+
+<%# Import/Include detailed footer component with user data %>
+<%- include('partials/footer-content', { user: user }) %>

@@ -1,0 +1,89 @@
+<%# Vehicle Upgrades Component - EXPORTED COMPONENT %>
+<div class="vehicle-upgrades-component">
+  <h2>Vehicle Upgrades</h2>
+  <% if (upgrades && upgrades.length > 0) { %>
+    <div class="upgrades-grid">
+      <% upgrades.forEach(upgrade => { %>
+        <div class="upgrade-item">
+          <img src="<%= upgrade.image %>" alt="<%= upgrade.name %>">
+          <a href="<%= upgrade.link %>"><%= upgrade.name %></a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <%# Default upgrades when no specific upgrades are provided %>
+    <div class="upgrades-grid">
+      <div class="upgrade-item">
+        <img src="/images/upgrades/flux-cap.png" alt="Flux Capacitor">
+        <a href="/upgrades/flux-capacitor">Flux Capacitor</a>
+      </div>
+      <div class="upgrade-item">
+        <img src="/images/upgrades/flame.jpg" alt="Flame Decals">
+        <a href="/upgrades/flame-decals">Flame Decals</a>
+      </div>
+      <div class="upgrade-item">
+        <img src="/images/upgrades/bumper_sticker.jpg" alt="Bumper Stickers">
+        <a href="/upgrades/bumper-stickers">Bumper Stickers</a>
+      </div>
+      <div class="upgrade-item">
+        <img src="/images/upgrades/hub-cap.jpg" alt="Hub Caps">
+        <a href="/upgrades/hub-caps">Hub Caps</a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<style>
+.vehicle-upgrades-component {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.vehicle-upgrades-component h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 0.5rem;
+}
+
+.upgrades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.upgrade-item {
+  text-align: center;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.upgrade-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.upgrade-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.upgrade-item a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.upgrade-item a:hover {
+  color: #e74c3c;
+}
+</style>

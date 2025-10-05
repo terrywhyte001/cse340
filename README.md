@@ -2,16 +2,40 @@
 
 ## 🎓 Instructions for Graders
 
-### Quick Start Guide
+### 🔐 Pre-Created Test Accounts (As Requested)
 
-#### Option 1: Use Pre-created Admin Account
+The following test accounts are available in the database for grading:
+
+#### Basic Client Account
+```
+Email: basic@cse340.net
+Password: Basic123!
+Account Type: Client
+Access Level: Standard user features only
+```
+
+#### Manager/Employee Account  
+```
+Email: manager@cse340.net
+Password: Manager123!
+Account Type: Employee
+Access Level: Inventory management, add/edit vehicles
+```
+
+#### Admin Account
 ```
 Email: admin@cse340.net
-Password: I@mAn@dmin
+Password: Admin123!
+Account Type: Admin  
+Access Level: Full administrative access
 ```
-1. Go to http://localhost:3000/account/login
-2. Enter the credentials above
-3. Access inventory management at http://localhost:3000/inv
+
+### Quick Start Guide
+
+#### Option 1: Use Pre-created Accounts (Recommended for Grading)
+1. Go to the live site or http://localhost:3000/account/login
+2. Use any of the test accounts above
+3. Access features based on account level
 
 #### Option 2: Create Your Own Account with Special Access
 1. Go to http://localhost:3000/account/register

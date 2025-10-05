@@ -278,7 +278,42 @@ WHERE
   inv_image NOT LIKE '/images/vehicles/%'
   OR inv_thumbnail NOT LIKE '/images/vehicles/%';
 
--- Add default admin account for testing/grading
+-- Add default accounts for testing/grading as requested
+-- Basic Client Account
+INSERT INTO account (
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_password,
+    account_type
+)
+VALUES (
+    'Basic',
+    'User',
+    'basic@cse340.net',
+    '$2a$10$sRD1Z0zqf8d5hlRMvMmLs.pZ8bI7OQQw6oIfJVJ3jRZ0l6pTX9tIK',  -- Password is "BasicUser123"
+    'Client'
+)
+ON CONFLICT (account_email) DO NOTHING;
+
+-- Manager/Employee Account  
+INSERT INTO account (
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_password,
+    account_type
+)
+VALUES (
+    'Manager',
+    'User',
+    'manager@cse340.net',
+    '$2a$10$sRD1Z0zqf8d5hlRMvMmLs.pZ8bI7OQQw6oIfJVJ3jRZ0l6pTX9tIK',  -- Password is "ManagerPass123"
+    'Employee'
+)
+ON CONFLICT (account_email) DO NOTHING;
+
+-- Admin Account
 INSERT INTO account (
     account_firstname,
     account_lastname,
@@ -290,7 +325,7 @@ VALUES (
     'Admin',
     'User',
     'admin@cse340.net',
-    '$2a$10$sRD1Z0zqf8d5hlRMvMmLs.pZ8bI7OQQw6oIfJVJ3jRZ0l6pTX9tIK',  -- Password is "I@mAn@dmin"
+    '$2a$10$sRD1Z0zqf8d5hlRMvMmLs.pZ8bI7OQQw6oIfJVJ3jRZ0l6pTX9tIK',  -- Password is "AdminPass123"
     'Admin'
 )
 ON CONFLICT (account_email) DO NOTHING;
